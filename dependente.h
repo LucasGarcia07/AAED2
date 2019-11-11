@@ -1,23 +1,23 @@
 #ifndef DEPENDENTE_H
 #define DEPENDENTE_H
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
 typedef struct Dependente{
-    int cod, codDependencia, idade, status, prox;
+    int cod, codDependencia, idade;
     char nome[50];
+    struct Dependente *prox;
 }Dependente;
 
-typedef struct ListaDep{
-    Dependente dependente;
-    ListaDep* prox;
-}ListaDep;
 
-void imprime(Depentente *depentente);
+void imprimeDp(Dependente *dependente);
 
-Depentente *criadepentente(int codDependencia, int idade, char *nome, double salario);
+Dependente *criaDp(int cod, int codDependencia, int idade, char *nome);
 
-void salva(Depentente *depentente, FILE *out);
+void salvaDp(int chave, Dependente *dependente,FILE *indexDp,  FILE *out);
 
-Depentente *le(FILE *in);
+Dependente *leDp(FILE *in);
 
-int tamanho();
+int tamanhoDp();
 #endif
