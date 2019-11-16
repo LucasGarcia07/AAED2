@@ -1,13 +1,12 @@
 #ifndef DEPENDENTE_H
 #define DEPENDENTE_H
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct Dependente{
     int cod, codDependencia, idade;
     char nome[50];
-    struct Dependente *prox;
 }Dependente;
 
 

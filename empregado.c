@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include<math.h>
+#include <math.h>
 
 void imprimeEmp(Empregado *empregado) {
     printf("\nCódigo do empregado: ");
@@ -65,15 +65,26 @@ int tamanhoEmp() {
     return  2 * sizeof(int) + sizeof(double) + sizeof(char) * 50 + sizeof(Empregado);
 }
 
-/*
-int hash(int x, int m, int p, int l){
+int hash(int x, int m, int l){
     return x % (m * pow(2, l));
+}
+
+int hashl(int x, int m, int *p, int *l){
+    int endereco = hash(x, m, p, l);
+    if(endereco < p){
+        return x % (m * pow(2, l+1));
+    }
+    return endereco;
 }
 
 double carga(int n, int m) return n/m;
 
-if(carga(n, m) > 1.4){
-    l++;
+void rotina(int m, int n, int *p, int *l){
+    if(carga(n, m) > 4){
+        p++;
+    }
+    if(p == m-1){
+        p = 0;
+        l++;
+    }
 }
-
-*/
