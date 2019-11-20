@@ -9,7 +9,6 @@ typedef struct Dependente{
     char nome[50];
 }Dependente;
 
-
 void imprimeDp(Dependente *dependente);
 
 Dependente *criaDp(int cod, int codDependencia, int idade, char *nome);

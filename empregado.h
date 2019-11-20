@@ -8,6 +8,9 @@ typedef struct Empregado{
     int cod, idade;
     double salario;
     char nome[50];
+    Empregado *proxEmp;
+    Empregado *proxNome;
+    Empregado *proxIdade;
 }Empregado;
 
 void imprimeEmp(Empregado *empregado);

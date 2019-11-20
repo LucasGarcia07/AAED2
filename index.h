@@ -1,54 +1,30 @@
-#ifndef EMPREGADO_H
-#define EMPREGADO_H
+#ifndef INDEX_H
+#define INDEX_H
 #include "empregado.h"
 #include "dependente.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
-
-typedef struct IndexDadosEmp{
-    Empregado *emp;
-    Empregado *proxEmpNome;
-    Empregado *proxIdade;
-    IndexDadosEmp *prox;
-}
-
-typedef struct IndexEmp{
-    Empregado *emp;
-    IndexEmp *prox;
-    int quantidade;
-}IndexEmp;
-
 typedef struct IndexDp{
-    Dependente *dp;
-    IndexDp *prox;
+    Dependente *prox;
     int quantidade;
 }IndexDp;
 
-typedef struct IndexNomeEmp{
-    char nomeEmp[50];
-    IndexNomeEmp *prox;
-    int quantidade;
-}IndexNomeEmp;
 
-typedef struct IndexIdadeEmp{
-    int idade;
-    IndexIdadeEmp *prox;
+//índice de empregados 
+typedef struct IndexEmp{
     int quantidade;
-}IndexIdadeEmp;
+    Empregado *prox;
+}IndexEmp;
 
-typedef struct IndexCodDp{
-    int codDp;
-    IndexCodDp *prox;
-    int quantidade;
-}
+IndexEmp *criaIndexEmp(Empregado *emp, int quantidade);
+
+IndexEmp *leIndexEmp(FILE *in);
+
+int tamanhoIndexEmp();
 
 
-typedef struct IndexIdadeDp{
-    int idade;
-    IndexIdadeDp *prox;
-    int quantidade;
-}
+
 
 #endif
