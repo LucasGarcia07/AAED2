@@ -14,7 +14,7 @@ IndexEmp *leIndexEmp(FILE *in){
 	free(index);
 	return NULL;
     }
-    fread(index->prox, sizeof(Empregado), in);
+    fread(index->prox, sizeof(Empregado), 1, in);
     return index;
 }
 
@@ -24,14 +24,35 @@ IndexEmp *criaIndexEmp(Empregado *emp, int quantidade){
     if (index) memset(index, 0, sizeof(IndexEmp));
     index->prox = emp;
     index->quantidade = 0;
-
     return index;
 }
 
-int tamanhoIndexEmp(){
-    return sizeof(Empregado) + sizeof(int);
+IndexDp *leIndexDp(FILE *in){
+    IndexDp *index = (IndexDp*) malloc(sizeof(IndexDp));
+    if (0 >= fread(&index->quantidade, sizeof(int), 1, in)) {
+	free(index);
+	return NULL;
+    }
+    fread(&index->prox, sizeof(Dependente*), 1, in);
+    return index;
 }
 
-IndexEmp *buscaSecEmp(){
-    
+IndexDp *criaIndexDp(Dependente *dp, int quantidade){
+    IndexDp *index = (IndexDp*) malloc(sizeof(IndexDp));
+        
+    if (index) memset(index, 0, sizeof(IndexDp));
+    index->prox = dp;
+    index->quantidade = quantidade;
+    return index;
+}
+
+void imprimeIndexDp(IndexDp *dp){
+    printf("\nQuantidade: %d\n", dp->quantidade);
+}
+
+int tamanhoIndexEmp(){
+    return sizeof(Empregado*) + sizeof(int);
+}
+int tamanhoIndexDp(){
+    return sizeof(Dependente*) + sizeof(int);
 }

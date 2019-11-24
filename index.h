@@ -6,6 +6,8 @@
 #include<stdlib.h>
 #include<string.h>
 
+
+
 typedef struct IndexDp{
     Dependente *prox;
     int quantidade;
@@ -22,6 +24,13 @@ IndexEmp *criaIndexEmp(Empregado *emp, int quantidade);
 
 IndexEmp *leIndexEmp(FILE *in);
 
+IndexDp *criaIndexDp(Dependente *dp, int quantidade);
+
+IndexDp *leIndexDp(FILE *in);
+
+void imprimeIndexDp(IndexDp *dp);
+
+int tamanhoIndexDp();
 int tamanhoIndexEmp();
 
 
