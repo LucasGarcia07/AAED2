@@ -10,20 +10,23 @@ int main(){
     int cod, codDependencia, idade, mEmp = 10, nEmp = 0, mDp = 10, nDp = 0;
     double salario;
     Empregado *empregado;
-    FILE *arqDadosEmp, *arqIndexEmp, *arqNomeEmp, *arqIdadeEmp, *arqSalarioEmp, *arqDep, *arqIndexDep;
+    FILE *arqDadosEmp, *arqIndexEmp, *arqNomeEmp, *arqIdadeEmp, *arqSalarioEmp, *arqDep, *arqIndexDep, *arqCodDp, *arqIdadeDp, *arqNomeDp;
+    
     arqDadosEmp = fopen("empregado.bin", "w+b");
     arqIndexEmp = fopen("indexEmp.bin", "w+b");
     arqNomeEmp = fopen("indexNomeEmp.bin", "w+b");
     arqIdadeEmp = fopen("indexIdadeEmp.bin", "w+b");
     arqSalarioEmp = fopen("indexSalarioEmp.bin", "w+b");
+    
     arqDep = fopen("dependente.bin", "w+b");
     arqIndexDep = fopen("indexDp.bin", "w+b");
+    arqCodDp = fopen("indexCodDp.bin", "w+b");
+    arqIdadeDp = fopen("indexIdadeDp.bin", "w+b");
+    arqNomeDp = fopen("indexNomeDp.bin", "w+b");
     Dependente *depentende;
 
     Dependente *aux = (Dependente*)malloc(sizeof(Dependente));
     aux->cod = -1;
-
-
 
     printf("\n*-----SISTEMA DE CONTROLE DE EMPREGADOS E DEPENDENTES-----*\n");
     printf("\n\n*--LISTA DE COMANDOS--*\n");
@@ -37,24 +40,38 @@ int main(){
     printf("\n empregadodps - Lista de nomes de dependentes do empregado");
     printf("\n sair - Fechar o programa\n\n");
     
+    //cria, salva e imprime o dependente
     Dependente *dependente = criaDp(1, 1, 1, "1", aux);
     IndexDp *indexDpAux;
-    salvaDp(1, dependente,arqIndexDep, arqDep);
-    printf("erro\n");
+    salvaDp(1, dependente,arqIndexDep, arqCodDp, arqIdadeDp, arqNomeDp, arqDep);
     fseek(arqDep, 0, SEEK_SET);
     Dependente *auxx = leDp(arqDep);
-    printf("%d", auxx->proxDp->cod);
-    printf("erro\n");
     imprimeDp(auxx);
+    
+    //imprime indexDp
     fseek(arqIndexDep, tamanhoIndexDp(), SEEK_SET);
-    printf("erroA\n");
     indexDpAux = leIndexDp(arqIndexDep);
     if(indexDpAux != NULL){
-        printf("erroA\n");
         imprimeIndexDp(indexDpAux);
-        printf("erroA\n");
     }
-
+    //imprime indexIdade
+    fseek(arqIdadeDp, 0, SEEK_SET);
+    IndexDp *idadeaux = leIndexDp(arqIdadeDp);
+    if(idadeaux != NULL){
+        imprimeIndexDp(idadeaux);
+    }
+    //imprime indexNome
+    fseek(arqNomeDp, 0, SEEK_SET);
+    IndexDp *nomeaux = leIndexDp(arqNomeDp);
+    if(nomeaux != NULL){
+        imprimeIndexDp(nomeaux);
+    }
+    //imprime indexCodDp
+    fseek(arqCodDp, 0, SEEK_SET);
+    IndexDp *codAux = leIndexDp(arqCodDp);
+    if(codAux != NULL){
+        imprimeIndexDp(codAux);
+    }
     // scanf("%s", comandos);
     // while(strcmp(comandos, "sair") != 0){        
         

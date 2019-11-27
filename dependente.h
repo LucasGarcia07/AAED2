@@ -17,7 +17,7 @@ void imprimeDp(Dependente *dependente);
 
 Dependente *criaDp(int cod, int codDependencia, int idade, char *nome, Dependente *aux);
 
-void salvaDp(int chave, Dependente *dependente,FILE *indexDp,  FILE *out);
+void salvaDp(int chave, Dependente *dependente, FILE *indexDp, FILE *indexCodDp, FILE *indexIdadeDp, FILE *indexNomeDp, FILE *out);
 
 Dependente *leDp(FILE *in);
 

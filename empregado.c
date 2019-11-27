@@ -39,183 +39,183 @@ void salvaEmp(int chave, Empregado *empregado, FILE *arqDadosEmp, FILE *arqEmp, 
     IndexEmp *indexIdadeEmpAux;
     IndexEmp *indexNomeEmpAux;
     IndexEmp *indexSalarioEmpAux;
-    FILE *arq = fopen("empregado.bin", "r+b");
-    FILE *arq2 = fopen("indexEmp.bin", "r+b");
+
     int j = 0;
     printf("erro: %d \n", j);
     j++;
-    fseek(arq2, tamanhoIndexEmp() * chave, SEEK_SET);
-    indexEmpAux = leIndexEmp(arq2);
+    fseek(arqEmp, tamanhoIndexEmp() * chave, SEEK_SET);
+    indexEmpAux = leIndexEmp(arqEmp);
     //Insere no arquivo de índice de empregado
     if(indexEmpAux == NULL){
+        fseek(arqEmp, tamanhoIndexEmp() * chave, SEEK_SET);
         IndexEmp *index;
         index = criaIndexEmp(empregado, 1);
-        fseek(arqEmp, tamanhoIndexEmp() * chave, SEEK_SET);
-        fwrite(&index->quantidade, sizeof(int),1, arq2);
-        fwrite(index->prox, sizeof(Empregado),1, arq2);
+        fwrite(&index->quantidade, sizeof(int),1, arqEmp);
+        fwrite(index->prox, sizeof(Empregado),1, arqEmp);
         printf("entrou\n");
     }else{
         empAux = indexEmpAux->prox;
-        indexEmpAux->quantidade += 1;
         if(empAux != NULL){
             while(empAux->proxEmp != NULL){
-            empAux = empAux->proxEmp;
+                empAux = empAux->proxEmp;
             }
         }
         empAux->proxEmp = empregado;
+        indexEmpAux->quantidade += 1;
     }
+
     printf("erro: %d \n", j);
     j++;
     //Rotina para inserir na lista encadeada de Idade;
-    // indexIdadeEmpAux = leIndexEmp(arqIdadeEmp);
+    indexIdadeEmpAux = leIndexEmp(arqIdadeEmp);
 
-    // //Se arquivo estava vazio ele insere no inicio
-    // if(indexIdadeEmpAux == NULL){
-    //     IndexEmp *index;
-    //     index = criaIndexEmp(empregado, 1);
-    //     fwrite(&index->quantidade, sizeof(int),1, arqIdadeEmp);
-    //     fwrite(index->prox, sizeof(Empregado),1, arqIdadeEmp);
-    // }else{
-    //     //Se arquivo não estava vazio e a idade do primeiro é igual a do empregado ele insere na primeira lista
-    //     if((indexIdadeEmpAux->prox)->idade == empregado->idade){
-    //         empAux = indexIdadeEmpAux->prox;
-    //         indexIdadeEmpAux->quantidade += 1;
-    //         if(empAux != NULL){
-    //             while(empAux->proxEmp != NULL){
-    //                 empAux = empAux->proxEmp;
-    //             }
-    //         }
-    //         empAux->proxEmp = empregado;
-    //     }else{
-    //         //Se o arquivo estava com listas e as idades não batem ele percorre até achar ou NULL ou a idade
-    //         int i = 1;
-    //         while(indexIdadeEmpAux != NULL && (indexIdadeEmpAux->prox)->idade != empregado->idade){
+    int i = 1;
+    while(indexIdadeEmpAux != NULL && (indexIdadeEmpAux->prox)->idade != empregado->idade){
+        fseek(arqIdadeEmp, tamanhoIndexEmp() * i, SEEK_SET);
+        indexIdadeEmpAux = leIndexEmp(arqIdadeEmp);
+        i++;
+    }
 
-    //             fseek(arqIdadeEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             indexIdadeEmpAux = leIndexEmp(arqIdadeEmp);
-    //             i++;
-    //         }
-    //         //Se achar NULL ele insere no final do arquivo   
-    //         if(indexIdadeEmpAux == NULL){
-    //             fseek(arqIdadeEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             IndexEmp *index;
-    //             index = criaIndexEmp(empregado, 1);
-    //             fwrite(&index->quantidade, sizeof(int),1, arqIdadeEmp);
-    //             fwrite(index->prox, sizeof(Empregado),1, arqIdadeEmp);
-    //         }else{
-    //             //Se achar uma lista de idade compatível ele percorre a lista e insere no final
-    //             empAux = indexIdadeEmpAux->prox;
-    //             indexIdadeEmpAux->quantidade += 1;
-    //             if(empAux != NULL){
-    //                 while(empAux->proxEmp != NULL){
-    //                     empAux = empAux->proxEmp;
-    //                 }
-    //             }
-    //             empAux->proxEmp = empregado;
-    //         }
-    //     }
-    // }
-    // printf("erro: %d \n", j);
-    // j++;
+    if(indexIdadeEmpAux == NULL){
+        IndexEmp *index;
+        index = criaIndexEmp(empregado, 1);
+        fwrite(&index->quantidade, sizeof(int),1, arqIdadeEmp);
+        fwrite(index->prox, sizeof(Empregado),1, arqIdadeEmp);
+    }else{
+        //Se arquivo não estava vazio e a idade do primeiro é igual a do empregado ele insere na primeira lista
+        if((indexIdadeEmpAux->prox)->idade == empregado->idade){
+            empAux = indexIdadeEmpAux->prox;
+            indexIdadeEmpAux->quantidade += 1;
+            if(empAux != NULL){
+                while(empAux->proxEmp != NULL){
+                    empAux = empAux->proxEmp;
+                }
+            }
+            empAux->proxEmp = empregado;
+        }else{
+            //Se o arquivo estava com listas e as idades não batem ele percorre até achar ou NULL ou a idade
+            
+            //Se achar NULL ele insere no final do arquivo   
+            if(indexIdadeEmpAux == NULL){
+                fseek(arqIdadeEmp, tamanhoIndexEmp() * i, SEEK_SET);
+                IndexEmp *index;
+                index = criaIndexEmp(empregado, 1);
+                fwrite(&index->quantidade, sizeof(int),1, arqIdadeEmp);
+                fwrite(index->prox, sizeof(Empregado),1, arqIdadeEmp);
+            }else{
+                //Se achar uma lista de idade compatível ele percorre a lista e insere no final
+                empAux = indexIdadeEmpAux->prox;
+                indexIdadeEmpAux->quantidade += 1;
+                if(empAux != NULL){
+                    while(empAux->proxEmp != NULL){
+                        empAux = empAux->proxEmp;
+                    }
+                }
+                empAux->proxEmp = empregado;
+            }
+        }
+    }
+    printf("erro: %d \n", j);
+    j++;
 
-    // //Insere no índice de nomes
-    // indexNomeEmpAux = leIndexEmp(arqNomeEmp);
+    //Insere no índice de nomes
+    indexNomeEmpAux = leIndexEmp(arqNomeEmp);
 
-    // //Se arquivo estava vazio ele insere no inicio
-    // if(indexNomeEmpAux == NULL){
-    //     IndexEmp *index;
-    //     index = criaIndexEmp(empregado, 1);
-    //     fwrite(&index->quantidade, sizeof(int),1, arqNomeEmp);
-    //     fwrite(index->prox, sizeof(Empregado),1, arqNomeEmp);
-    // }else{
-    //     //Se arquivo não estava vazio e o nome do primeiro é igual a do empregado ele insere na primeira lista
-    //     if(strcmp((indexNomeEmpAux->prox)->nome, empregado->nome) == 0){
-    //         empAux = indexNomeEmpAux->prox;
-    //         indexNomeEmpAux->quantidade += 1;
-    //         if(empAux != NULL){
-    //             while(empAux->proxEmp != NULL){
-    //                 empAux = empAux->proxEmp;
-    //             }
-    //         }
-    //         empAux->proxEmp = empregado;
-    //     }else{
-    //         //Se o arquivo estava com listas e os nomes não batem ele percorre até achar ou NULL ou o nome
-    //         int i = 1;
-    //         while(indexNomeEmpAux != NULL && strcmp((indexNomeEmpAux->prox)->nome, empregado->nome) != 0) {
+    //Se arquivo estava vazio ele insere no inicio
+    if(indexNomeEmpAux == NULL){
+        IndexEmp *index;
+        index = criaIndexEmp(empregado, 1);
+        fwrite(&index->quantidade, sizeof(int),1, arqNomeEmp);
+        fwrite(index->prox, sizeof(Empregado),1, arqNomeEmp);
+    }else{
+        //Se arquivo não estava vazio e o nome do primeiro é igual a do empregado ele insere na primeira lista
+        if(strcmp((indexNomeEmpAux->prox)->nome, empregado->nome) == 0){
+            empAux = indexNomeEmpAux->prox;
+            indexNomeEmpAux->quantidade += 1;
+            if(empAux != NULL){
+                while(empAux->proxEmp != NULL){
+                    empAux = empAux->proxEmp;
+                }
+            }
+            empAux->proxEmp = empregado;
+        }else{
+            //Se o arquivo estava com listas e os nomes não batem ele percorre até achar ou NULL ou o nome
+            int i = 1;
+            while(indexNomeEmpAux != NULL && strcmp((indexNomeEmpAux->prox)->nome, empregado->nome) != 0) {
 
-    //             fseek(arqNomeEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             indexNomeEmpAux = leIndexEmp(arqNomeEmp);
-    //             i++;
-    //         }
-    //         //Se achar NULL ele insere no final do arquivo   
-    //         if(indexNomeEmpAux == NULL){
-    //             fseek(arqNomeEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             IndexEmp *index;
-    //             index = criaIndexEmp(empregado, 1);
-    //             fwrite(&index->quantidade, sizeof(int),1, arqNomeEmp);
-    //             fwrite(index->prox, sizeof(Empregado),1, arqNomeEmp);
-    //         }else{
-    //             //Se achar uma lista de nome compatível ele percorre a lista e insere no final
-    //             empAux = indexNomeEmpAux->prox;
-    //             indexIdadeEmpAux->quantidade += 1;
-    //             if(empAux != NULL){
-    //                 while(empAux->proxEmp != NULL){
-    //                 empAux = empAux->proxEmp;
-    //                 }
-    //             }
-    //             empAux->proxEmp = empregado;
-    //         }
-    //     }
-    // }
-    // printf("erro: %d \n", j);
-    // j++;
-    // indexSalarioEmpAux = leIndexEmp(arqSalarioEmp);
-    // //Se arquivo estava vazio ele insere no inicio
-    // if(indexSalarioEmpAux == NULL){
-    //     IndexEmp *index;
-    //     index = criaIndexEmp(empregado, 1);
-    //     fwrite(&index->quantidade, sizeof(int),1, arqSalarioEmp);
-    //     fwrite(index->prox, sizeof(Empregado),1, arqSalarioEmp);
-    // }else{
-    //     //Se arquivo não estava vazio e o salario do primeiro é igual a do empregado ele insere na primeira lista
-    //     if((indexIdadeEmpAux->prox)->salario == empregado->salario){
-    //         empAux = indexSalarioEmpAux->prox;
-    //         indexIdadeEmpAux->quantidade += 1;
-    //         if(empAux != NULL){
-    //             while(empAux->proxEmp != NULL){
-    //                 empAux = empAux->proxEmp;
-    //             }
-    //         }
-    //         empAux->proxEmp = empregado;
-    //     }else{
-    //         //Se o arquivo estava com listas e os salarios não batem ele percorre até achar ou NULL ou o salario
-    //         int i = 1;
-    //         while(indexIdadeEmpAux != NULL && (indexIdadeEmpAux->prox)->salario != empregado->salario){
+                fseek(arqNomeEmp, tamanhoIndexEmp() * i, SEEK_SET);
+                indexNomeEmpAux = leIndexEmp(arqNomeEmp);
+                i++;
+            }
+            //Se achar NULL ele insere no final do arquivo   
+            if(indexNomeEmpAux == NULL){
+                fseek(arqNomeEmp, tamanhoIndexEmp() * i, SEEK_SET);
+                IndexEmp *index;
+                index = criaIndexEmp(empregado, 1);
+                fwrite(&index->quantidade, sizeof(int),1, arqNomeEmp);
+                fwrite(index->prox, sizeof(Empregado),1, arqNomeEmp);
+            }else{
+                //Se achar uma lista de nome compatível ele percorre a lista e insere no final
+                empAux = indexNomeEmpAux->prox;
+                indexIdadeEmpAux->quantidade += 1;
+                if(empAux != NULL){
+                    while(empAux->proxEmp != NULL){
+                    empAux = empAux->proxEmp;
+                    }
+                }
+                empAux->proxEmp = empregado;
+            }
+        }
+    }
+    printf("erro: %d \n", j);
+    j++;
+    indexSalarioEmpAux = leIndexEmp(arqSalarioEmp);
+    //Se arquivo estava vazio ele insere no inicio
+    if(indexSalarioEmpAux == NULL){
+        IndexEmp *index;
+        index = criaIndexEmp(empregado, 1);
+        fwrite(&index->quantidade, sizeof(int),1, arqSalarioEmp);
+        fwrite(index->prox, sizeof(Empregado),1, arqSalarioEmp);
+    }else{
+        //Se arquivo não estava vazio e o salario do primeiro é igual a do empregado ele insere na primeira lista
+        if((indexIdadeEmpAux->prox)->salario == empregado->salario){
+            empAux = indexSalarioEmpAux->prox;
+            indexIdadeEmpAux->quantidade += 1;
+            if(empAux != NULL){
+                while(empAux->proxEmp != NULL){
+                    empAux = empAux->proxEmp;
+                }
+            }
+            empAux->proxEmp = empregado;
+        }else{
+            //Se o arquivo estava com listas e os salarios não batem ele percorre até achar ou NULL ou o salario
+            int i = 1;
+            while(indexIdadeEmpAux != NULL && (indexIdadeEmpAux->prox)->salario != empregado->salario){
 
-    //             fseek(arqSalarioEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             indexIdadeEmpAux = leIndexEmp(arqSalarioEmp);
-    //             i++;
-    //         }
-    //         //Se achar NULL ele insere no final do arquivo   
-    //         if(indexSalarioEmpAux == NULL){
-    //             fseek(arqSalarioEmp, tamanhoIndexEmp() * i, SEEK_SET);
-    //             IndexEmp *index;
-    //             index = criaIndexEmp(empregado, 1);
-    //             fwrite(&index->quantidade, sizeof(int),1, arqSalarioEmp);
-    //             fwrite(index->prox, sizeof(Empregado),1, arqSalarioEmp);
-    //         }else{
-    //             //Se achar uma lista de idade compatível ele percorre a lista e insere no final
-    //             empAux = indexSalarioEmpAux->prox;
-    //             indexSalarioEmpAux->quantidade += 1;
-    //             if(empAux != NULL){
-    //                 while(empAux->proxEmp != NULL){
-    //                     empAux = empAux->proxEmp;
-    //                 }
-    //             }
-    //             empAux->proxEmp = empregado;
-    //         }
-    //     }
-    // }
+                fseek(arqSalarioEmp, tamanhoIndexEmp() * i, SEEK_SET);
+                indexIdadeEmpAux = leIndexEmp(arqSalarioEmp);
+                i++;
+            }
+            //Se achar NULL ele insere no final do arquivo   
+            if(indexSalarioEmpAux == NULL){
+                fseek(arqSalarioEmp, tamanhoIndexEmp() * i, SEEK_SET);
+                IndexEmp *index;
+                index = criaIndexEmp(empregado, 1);
+                fwrite(&index->quantidade, sizeof(int),1, arqSalarioEmp);
+                fwrite(index->prox, sizeof(Empregado),1, arqSalarioEmp);
+            }else{
+                //Se achar uma lista de idade compatível ele percorre a lista e insere no final
+                empAux = indexSalarioEmpAux->prox;
+                indexSalarioEmpAux->quantidade += 1;
+                if(empAux != NULL){
+                    while(empAux->proxEmp != NULL){
+                        empAux = empAux->proxEmp;
+                    }
+                }
+                empAux->proxEmp = empregado;
+            }
+        }
+    }
     printf("erro: %d \n", j);
     j++;
     //Rotina para inserir no arquivo de dados

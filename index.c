@@ -54,5 +54,5 @@ int tamanhoIndexEmp(){
     return sizeof(Empregado*) + sizeof(int);
 }
 int tamanhoIndexDp(){
-    return sizeof(Dependente*) + sizeof(int);
+    return sizeof(Dependente) + sizeof(int);
 }
