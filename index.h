@@ -20,7 +20,7 @@ typedef struct IndexEmp{
     Empregado *prox;
 }IndexEmp;
 
-IndexEmp *criaIndexEmp(Empregado *emp, int quantidade);
+IndexEmp *criaIndexEmp(Empregado *emp);
 
 IndexEmp *leIndexEmp(FILE *in);
 
@@ -29,6 +29,8 @@ IndexDp *criaIndexDp(Dependente *dp, int quantidade);
 IndexDp *leIndexDp(FILE *in);
 
 void imprimeIndexDp(IndexDp *dp);
+
+void imprimeIndexEmp(IndexEmp *emp);
 
 int tamanhoIndexDp();
 int tamanhoIndexEmp();

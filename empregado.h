@@ -9,14 +9,15 @@ typedef struct Empregado{
     double salario;
     char nome[50];
     struct Empregado *proxEmp;
-    // struct Empregado *proxNomeEmp;
-    // struct Empregado *proxIdadeEmp;
-    // struct Empregado *proxSalarioEmp;
+    struct Empregado *proxNomeEmp;
+    struct Empregado *proxIdadeEmp;
+    struct Empregado *proxSalarioEmp;
+    int flag;
 }Empregado;
 
 void imprimeEmp(Empregado *empregado);
 
-Empregado *criaEmp(int cod, int idade, char *nome, double salario);
+Empregado *criaEmp(int cod, int idade, double salario, char *nome, Empregado *aux);
 
 void salvaEmp(int chave, Empregado *empregado, FILE *arqDadosEmp, FILE *arqEmp, FILE *arqNomeEmp, FILE *arqIdadeEmp, FILE *arqSalarioEmp);
 

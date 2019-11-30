@@ -1,4 +1,5 @@
 #include "dependente.h"
+#include "empregado.h"
 #include "index.h"
 #include <stdio.h>
 #include <string.h>
@@ -54,7 +55,6 @@ void salvaDp(int chave, Dependente *dependente, FILE *indexDp, FILE *indexCodDp,
             idpAux->quantidade += 1;
         }else{
             dpAux = idpAux->prox;
-            
             while(dpAux->proxDp != NULL){
                 dpAux = dpAux->proxDp;
             }
@@ -175,6 +175,102 @@ void salvaDp(int chave, Dependente *dependente, FILE *indexDp, FILE *indexCodDp,
     fwrite(dependente->proxCodDp, sizeof(Dependente), 1, out);
     fwrite(dependente->proxIdadeDp, sizeof(Dependente), 1, out);
     fwrite(dependente->proxNomeDp, sizeof(Dependente), 1, out);
+}
+
+Empregado *buscaNumDp(int quant, FILE *arqCodDp, FILE *arqindexEmp){
+    Dependente *dependente;
+    IndexDp *codDp;
+    Empregado *empregado;
+    IndexEmp *empaux;
+    int codaux;
+    fseek(arqCodDp, 0,SEEK_SET);
+    codDp = leIndexDp(arqCodDp);
+    int i = 0;
+    while(codDp != NULL && codDp->quantidade < quant){
+        i++;
+        fseek(arqCodDp, i * tamanhoIndexDp(), SEEK_SET);
+        codDp = leIndexDp(arqCodDp);
+    }
+    if(codDp != NULL && codDp->quantidade >= quant){
+        int codaux = codDp->prox->codDependencia; 
+    }else{
+        printf("não existe nenhum empregado com esse número de dependentes");
+    }
+    
+    fseek(arqindexEmp, 0, SEEK_SET);
+    empaux = leIndexEmp(arqindexEmp);
+    i = 0;
+    while(empaux != NULL && empaux->prox->cod != codaux){
+        i++;
+        fseek(arqindexEmp, i * tamanhoIndexEmp(), SEEK_SET);
+        empaux = leIndexEmp(arqindexEmp);
+    }
+    if(empaux != NULL && empaux->prox->cod == codaux){
+        return empaux->prox;
+    }else{
+        printf("houve um erro ao buscar o empregado");
+    }
+}
+
+Dependente *buscaNomeDp(char *nome, FILE *arqNome){
+    Dependente *empregado;
+    
+    
+    fseek(arqNome, 0, SEEK_SET);
+    IndexDp *nomeEmp = leIndexDp(arqNome);
+    
+    int i = 0;
+    while(nomeEmp != NULL && strcmp(nomeEmp->prox->nome, nome) != 0){
+        i++;
+        fseek(arqNome, i * tamanhoIndexDp(), SEEK_SET);
+        nomeEmp = leIndexDp(arqNome);
+    }
+    if(nomeEmp != NULL && strcmp(nomeEmp->prox->nome, nome) == 0){
+        return nomeEmp->prox;
+        
+    }else{
+        printf("Nossos registros não possuem um empregado com esse nome");
+    }
+}
+
+Dependente *buscaIdadeDp(int idade, FILE *arqIdadeDp){
+    Dependente *dependente;
+    IndexDp *idadeDp;
+    fseek(arqIdadeDp, 0, SEEK_SET);
+    idadeDp = leIndexDp(arqIdadeDp);
+    int i = 0;
+    while(idadeDp != NULL && idadeDp->prox->idade > idade){
+        i++;
+        fseek(arqIdadeDp, i * tamanhoIndexDp(), SEEK_SET);
+        idadeDp = leIndexDp(arqIdadeDp);
+    }
+    if(idadeDp != NULL && idadeDp->prox->idade <= idade){
+        return idadeDp->prox;
+    
+    }else{
+        printf("não há nenhum dependente com idade menor que %d nos nossos registros", idade);
+    }
+}
+
+void buscaNomeDeps(int codEmp, FILE *arqCodDp){
+    Dependente *dependente;
+    IndexDp *indexDp;
+    fseek(arqCodDp, 0, SEEK_SET);
+    indexDp = leIndexDp(arqCodDp);
+    int i = 0;
+    while(indexDp != NULL && indexDp->prox->codDependencia != codEmp){
+        i++;
+        fseek(arqCodDp, i * tamanhoIndexDp(), SEEK_SET);
+        indexDp = leIndexDp(arqCodDp);
+    }
+    if(indexDp != NULL && indexDp->prox->codDependencia == codEmp){
+        imprimeDp(indexDp->prox);
+        dependente = indexDp->prox;
+        while(dependente->proxDp != NULL){
+            imprimeDp(dependente->proxDp);
+            dependente = dependente->proxDp;
+        }
+    }
 }
 
 Dependente *leDp(FILE *in){
